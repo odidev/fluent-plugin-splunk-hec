@@ -1,0 +1,18 @@
+dist: bionic
+
+arch:
+  - amd64
+  - arm64
+
+services:
+  - docker
+
+script:
+  - make docker
+  - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
+  - if [ "${TRAVIS_CPU_ARCH}" == "arm64" ]; then
+       docker tag odidev/fluentd-hec:1.2.5 odidev/fluentd-hec:1.2.5_arm64;
+       docker push odidev/fluentd-hec:1.2.5_arm64;
+    else
+       docker push odidev/fluentd-hec:1.2.5;
+    fi
